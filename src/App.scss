@@ -1,0 +1,28 @@
+@import "./assets/sass/variables";
+
+.logo {
+  z-index: -1;
+  opacity: .25;
+  top: -12rem;
+  left: -12rem;
+  bottom: -12rem;
+  svg {
+    height: 100%;
+    @media (prefers-reduced-motion: no-preference) {
+      animation: spin infinite 20s linear;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status {
+  font-size: $font-size-base * .675;
+}
