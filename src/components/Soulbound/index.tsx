@@ -58,7 +58,7 @@ function Soulbound() {
   const { tokens, synced } = useAppSelector((state) => state.soulbound);
 
   const [modalShow, setModalShow] = useState(false);
-  const [form, setForm] = useState<{ [prop: string]: any }>({ address: '' });
+  const [form, setForm] = useState<{ [prop: string]: any }>({ address: '' }); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [errors, setErrors] = useState<{ [prop: string]: string | null }>({});
 
   // useDeepEffect(() => {
@@ -69,7 +69,7 @@ function Soulbound() {
     if (!synced) {
       dispatch(persistTokens());
     }
-  }, [synced]);
+  }, [synced]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     !tokens.length && dispatch(loadTokens());
@@ -102,6 +102,7 @@ function Soulbound() {
       });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setField = (field: string, value: any) => {
     setForm({
       ...form,

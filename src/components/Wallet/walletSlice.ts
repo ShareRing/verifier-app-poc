@@ -13,6 +13,7 @@ interface WalletState {
 }
 
 // Define the initial state using that type
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 const initialState: WalletState = {
   chainId: process.env.REACT_APP_CHAIN_ID!,
   rpcEndpoint: process.env.REACT_APP_RPC_ENDPOINT!,
@@ -21,6 +22,7 @@ const initialState: WalletState = {
   isWalletInstalled: false,
   isConnected: false
 };
+/* eslint-enable @typescript-eslint/no-non-null-assertion */
 
 export const walletSlice = createSlice({
   name: 'wallet',

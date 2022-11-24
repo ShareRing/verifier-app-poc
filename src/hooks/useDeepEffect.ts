@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import deepEqual from 'fast-deep-equal/es6/react';
 
 const isPrimitive = (value: number | string) =>
   ['number', 'string', 'boolean'].includes(typeof value);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const warnDeps = (dependencies: any[]) => {
   if (dependencies.length === 0) {
     console.warn('useDeepEffect should not be used with no dependencies. Use useEffect instead.');
@@ -14,7 +15,15 @@ const warnDeps = (dependencies: any[]) => {
   }
 };
 
-const getTriggerDeps = (dependencies: any[], comparisonFn: Function): number[] => {
+type CompareFunction = (
+  a: React.DependencyList | undefined,
+  b: React.DependencyList | undefined
+) => boolean;
+
+const getTriggerDeps = (
+  dependencies: React.DependencyList,
+  comparisonFn: CompareFunction
+): number[] => {
   const ref = useRef<React.DependencyList>(); // eslint-disable-line react-hooks/rules-of-hooks
   const triggerDeps = useRef<number>(0); // eslint-disable-line react-hooks/rules-of-hooks
 
@@ -28,8 +37,8 @@ const getTriggerDeps = (dependencies: any[], comparisonFn: Function): number[] =
 
 const useDeepEffect = (
   fn: React.EffectCallback,
-  dependencies: any[] = [],
-  comparisonFn: Function = deepEqual
+  dependencies: any[] = [], // eslint-disable-line @typescript-eslint/no-explicit-any
+  comparisonFn: CompareFunction = deepEqual
 ): void => {
   if (process.env.NODE_ENV !== 'production') {
     warnDeps(dependencies);

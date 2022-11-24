@@ -93,7 +93,7 @@ function Wallet() {
       suggestChain();
       window.addEventListener('keplr_keystorechange', handleKeystoreChange);
     }
-  }, [isWalletInstalled]);
+  }, [isWalletInstalled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleConnectWallet = async () => {
     assert(window.keplr);
@@ -112,7 +112,7 @@ function Wallet() {
 
   useEffect(() => {
     dispatch(persistWallet());
-  }, [address, isConnected]);
+  }, [address, isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDisconnectWallet = () => {
     dispatch(setWallet({ isConnected: false, address: undefined }));
