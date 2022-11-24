@@ -82,11 +82,6 @@ function Wallet() {
   useEffect(() => {
     //dispatch(loadWallet());
     dispatch(setWalletInstalled(!!window.keplr));
-    if (isWalletInstalled) {
-      suggestChain();
-      window.addEventListener('keplr_keystorechange', handleKeystoreChange);
-    }
-
     return () => {
       window.removeEventListener('keplr_keystorechange', handleKeystoreChange);
     };
@@ -94,11 +89,20 @@ function Wallet() {
 
   useEffect(() => {
     setShow(!isWalletInstalled);
+    if (isWalletInstalled) {
+      suggestChain();
+      window.addEventListener('keplr_keystorechange', handleKeystoreChange);
+    }
   }, [isWalletInstalled]);
 
   const handleConnectWallet = async () => {
     assert(window.keplr);
-    await window.keplr.enable(chainId);
+    await window.keplr.enable(chainId).catch((err) => {
+      if (err?.message?.indexOf('There is no chain info') >= 0) {
+        return suggestChain();
+      }
+      throw err;
+    });
     const offlineSigner = window.keplr.getOfflineSigner(chainId);
     const [account] = await offlineSigner.getAccounts();
     if (account && account.address) {
