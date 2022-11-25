@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { assert } from '../../utils';
-import { setWalletInstalled, setWallet, persistWallet } from './walletSlice';
+import { setWalletInstalled, setWallet, persistWallet, fetchAccInfo } from './walletSlice';
+import { connect } from '../Shareledger/shareledgerSlice';
 
 function Wallet() {
-  const {
-    isWalletInstalled,
-    isConnected,
-    chainId,
-    rpcEndpoint,
-    restEndpoint,
-    explorerEndpoint,
-    address
-  } = useAppSelector((state) => state.wallet);
+  const { isWalletInstalled, isConnected, address, synced, accountNumber, sequence, balance } =
+    useAppSelector((state) => state.wallet);
+  const { rpcEndpoint, restEndpoint, explorerEndpoint, chainId } = useAppSelector(
+    (state) => state.shareledger
+  );
   const dispatch = useAppDispatch();
 
   const [show, setShow] = useState(false);
@@ -82,6 +79,7 @@ function Wallet() {
   useEffect(() => {
     //dispatch(loadWallet());
     dispatch(setWalletInstalled(!!window.keplr));
+    dispatch(connect());
     return () => {
       window.removeEventListener('keplr_keystorechange', handleKeystoreChange);
     };
@@ -111,8 +109,16 @@ function Wallet() {
   };
 
   useEffect(() => {
-    dispatch(persistWallet());
-  }, [address, isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (isConnected) {
+      dispatch(fetchAccInfo());
+    }
+  }, [isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!synced) {
+      dispatch(persistWallet());
+    }
+  }, [synced]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDisconnectWallet = () => {
     dispatch(setWallet({ isConnected: false, address: undefined }));
@@ -139,6 +145,11 @@ function Wallet() {
           >
             Connected to: {address}
           </Button>
+          <Row className="mt-3">
+            <Col>Balance: {balance?.map((b) => `${b.amount}${b.denom}`).join(' ')}</Col>
+            <Col>Account Number: {accountNumber ?? 0}</Col>
+            <Col>Sequence: {sequence ?? 0}</Col>
+          </Row>
         </>
       )}
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
