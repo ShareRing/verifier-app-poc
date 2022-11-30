@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { Account, Coin } from 'shr-client-ts';
 import { AppDispatch, AppThunk, RootState } from '../../store';
 import { assert } from '../../utils';
-import type { Account, Coin } from 'shr-client-ts';
 
 // Define a type for the slice state
 interface WalletState {
   isWalletInstalled: boolean;
   isConnected: boolean;
-  address?: string;
+  address: string;
   accountNumber?: number;
   sequence?: number;
   balance?: Coin[];
@@ -17,6 +17,7 @@ interface WalletState {
 // Define the initial state using that type
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const initialState: WalletState = {
+  address: '',
   isWalletInstalled: false,
   isConnected: false,
   synced: true
@@ -34,7 +35,7 @@ export const walletSlice = createSlice({
     setWalletInstalled: (state, action: PayloadAction<boolean>) => {
       state.isWalletInstalled = action.payload;
     },
-    setWallet: (state, action: PayloadAction<{ isConnected: boolean; address?: string }>) => {
+    setWallet: (state, action: PayloadAction<{ isConnected: boolean; address: string }>) => {
       state.isConnected = action.payload.isConnected;
       state.address = action.payload.address;
       state.synced = false;
@@ -77,7 +78,6 @@ export const fetchAccInfo = createAsyncThunk<
   const { address } = getState().wallet;
   const { client } = getState().shareledger;
   assert(address);
-  assert(client);
   const info = await client.getAccount(address);
   dispatch(fetchBalance());
   return info;

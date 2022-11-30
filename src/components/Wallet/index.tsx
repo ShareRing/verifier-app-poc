@@ -70,7 +70,7 @@ function Wallet() {
   };
 
   const handleKeystoreChange = () => {
-    dispatch(setWallet({ isConnected: false, address: undefined }));
+    dispatch(setWallet({ isConnected: false, address: '' }));
     if (!window.keplr) {
       dispatch(setWalletInstalled(false));
     }
@@ -121,7 +121,7 @@ function Wallet() {
   }, [synced]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDisconnectWallet = () => {
-    dispatch(setWallet({ isConnected: false, address: undefined }));
+    dispatch(setWallet({ isConnected: false, address: '' }));
   };
 
   return (

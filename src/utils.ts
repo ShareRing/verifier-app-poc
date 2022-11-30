@@ -19,3 +19,13 @@ export function assertDefinedAndNotNull<T>(
     throw new Error(msg ?? 'value is undefined or null');
   }
 }
+
+export function blobToBase64(blob: Blob): Promise<string | ArrayBuffer | null> {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+
+export function base64ToBlob(base64: string) {}
