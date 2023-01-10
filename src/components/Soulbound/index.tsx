@@ -43,6 +43,14 @@ function SoulboundItem({
   };
 
   useEffect(() => {
+    if (removeState === 1) {
+      setTimeout(() => {
+        setRemoveState(0);
+      }, 5000);
+    }
+  }, [removeState]);
+
+  useEffect(() => {
     if (!localToken.metadata) {
       setIsLoading(true);
       dispatch(fetchTokenMetadata(localToken))
