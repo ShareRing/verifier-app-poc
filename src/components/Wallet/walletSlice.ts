@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Account, Coin } from 'shr-client-ts';
+import type { Account, Coin } from '@shareledgerjs/client';
 import { AppDispatch, AppThunk, RootState } from '../../store';
 import { assert } from '../../utils';
 

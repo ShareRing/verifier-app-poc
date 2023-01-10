@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
+    "@shareledgerjs/client": "^0.29.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -29,7 +30,6 @@
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
-    "shr-client-ts": "git+ssh://git@bitbucket.org/shareringvietnam/shr-client-ts.git#documentation-refactor",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "typescript": "^4.4.2",

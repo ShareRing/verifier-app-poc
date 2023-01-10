@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ShareledgerSigningClient } from 'shr-client-ts';
+import { ShareledgerSigningClient } from '@shareledgerjs/client';
 import { AppDispatch, RootState } from '../../store';
 
 // Define a type for the slice state
