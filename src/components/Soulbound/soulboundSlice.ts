@@ -105,9 +105,9 @@ export const fetchTokenMetadata = createAsyncThunk<
     // // get token metadata from uri
     // const chunks = [];
     // only ipfs:// at the moment
-    const path = token.uri?.split('://').pop();
+    const path: string | undefined = token.uri?.split('://').pop();
     assert(path);
-    const metadata = await fetch(`https://sharering.mypinata.cloud/ipfs/${path}`).then((res) =>
+    const metadata: any = await fetch(`https://sharering.mypinata.cloud/ipfs/${path}`).then((res) =>
       res.json()
     );
     if (metadata) {
@@ -170,7 +170,7 @@ export const addToken = createAsyncThunk<
       return rejectWithValue(`Contract address not found on network ${chainId}`);
     }
 
-    const { token_uri } = await client.wasm.smartContractState(address, { get_token_uri: {} });
+    const { token_uri } = await client.wasm.smartContractState<any>(address, { get_token_uri: {} });
     // shareledger16s0dq5llcxlafw80pph6kcky3mxjkv49q8qu5syw5l8kw567s4qqv3kzr3
     // shareledger1g5qk7649262j0dedq57gmcu5x3n23y50qy70x3yhwpa4w0w50q3sntygkq
     // shareledger1ygrugz3vqffclrlazm36sjcukwheqtk7pap8eydpxpn5hsxhjufq2v9507
@@ -210,7 +210,7 @@ export const verifyToken = createAsyncThunk<
   const { client } = getState().shareledger;
   const qualified = { ...token.qualified };
   try {
-    const res = await client.wasm.smartContractState(token.address, {
+    const res = await client.wasm.smartContractState<any>(token.address, {
       get_soul_bound_token: { soul: address }
     });
     if (res) {
